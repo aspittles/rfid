@@ -1,0 +1,81 @@
+{
+    "config": {
+        "log_level": "DEBUG",
+        "log_file": "/home/pi/rfid/door-access.log",
+        "reader": "PN532",
+        "open_door": false,
+        "door_pass": "<Password>"
+    },
+    "users": [
+        {
+            "uid": "2732348444",
+            "created": "2020-08-09 21:01:52",
+            "lastEntered": "",
+            "keyType": "KeyCard",
+            "active": true,
+            "firstName": "User1",
+            "lastName": "Person1",
+            "notes": ""
+        },
+        {
+            "uid": "3068557355",
+            "created": "2020-08-09 21:02:16",
+            "lastEntered": "",
+            "keyType": "KeyCard",
+            "active": true,
+            "firstName": "User2",
+            "lastName": "Person2",
+            "notes": ""
+        },
+        {
+            "uid": "312259636",
+            "created": "2020-08-09 21:02:46",
+            "lastEntered": "",
+            "keyType": "KeyCard",
+            "active": true,
+            "firstName": "User3",
+            "lastName": "Person3",
+            "notes": ""
+        },
+        {
+            "uid": "3377558178",
+            "created": "2020-08-09 21:03:29",
+            "lastEntered": "",
+            "keyType": "KeyFob",
+            "active": true,
+            "firstName": "User4",
+            "lastName": "Person4",
+            "notes": ""
+        },
+        {
+            "uid": "4221673243",
+            "created": "2020-08-09 21:03:52",
+            "lastEntered": "",
+            "keyType": "KeyFob",
+            "active": true,
+            "firstName": "User5",
+            "lastName": "Person5",
+            "notes": ""
+        },
+        {
+            "uid": "4148610171",
+            "created": "2020-08-09 21:04:16",
+            "lastEntered": "",
+            "keyType": "KeyFob",
+            "active": true,
+            "firstName": "User6",
+            "lastName": "Person6",
+            "notes": ""
+        },
+        {
+            "uid": "757554951013440",
+            "created": "2020-08-09 21:04:39",
+            "lastEntered": "",
+            "keyType": "CreditCard",
+            "active": true,
+            "firstName": "User7",
+            "lastName": "Person7",
+            "notes": ""
+        }
+    ]
+}
