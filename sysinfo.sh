@@ -19,6 +19,6 @@ echo "$(tput setaf 2)
 ( : '~'.~.'~' : ) Load Averages......: ${one}, ${five}, ${fifteen} (1, 5, 15 min)
  ~ .~ (   ) ~. ~  Running Processes..: `ps ax | wc -l | tr -d " "`
   (  : '~' :  )   IP Addresses.......: `ip a | grep glo | awk '{print $2}' | head -1 | cut -f1 -d/` and `wget -q -O - http://icanhazip.com/ | tail`
-   '~ .~~~. ~'    CPU Temprature.....: `/opt/vc/bin/vcgencmd measure_temp | sed 's/temp=//'`
+   '~ .~~~. ~'    CPU Temprature.....: `vcgencmd measure_temp | sed 's/temp=//'`
        '~'
 $(tput sgr0)"
