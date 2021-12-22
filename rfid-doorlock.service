@@ -8,6 +8,8 @@ Type=simple
 ExecStart=/usr/bin/python3 /home/pi/rfid/rfid-read-validate.py
 StandardInput=tty-force
 Environment=SYSTEMD_LOG_LEVEL=debug
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
