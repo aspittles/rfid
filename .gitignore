@@ -1,3 +1,4 @@
 /door-access.log
+/door-access-archive-*.log
 /rfid-door-lock.json
 __pycache__/
