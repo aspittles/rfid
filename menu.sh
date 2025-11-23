@@ -9,5 +9,7 @@ echo "    4. Stop"
 echo
 echo "    5. Add New User"
 echo
+echo "    6. Show last 20 Log Entries"
+echo
 echo "    0. This Menu"
 echo
