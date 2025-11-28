@@ -24,8 +24,9 @@ def validate_access( uid, data ):
     if authorised:
       led_green()
       if (data["config"]["open_door"]):
-        doorpass = data["config"]["door_pass"]
-        open_door(doorpass)
+        # doorpass = data["config"]["door_pass"]
+        # open_door(doorpass) # Old Bio lock method to open door
+        mosfet_on() # Send 12V power to door Solenoid to open door
       logging.info("ALLOW: Access by: " + str(uid) + " (" + name + ")")
       logging.debug((data["users"][record_num]))
       now = datetime.datetime.now()
@@ -51,11 +52,11 @@ with open('/home/pi/rfid/rfid-door-lock.json') as f:
 # Enable & configure logging
 logging.basicConfig(filename=(data["config"]["log_file"]),level=logging.INFO,format='%(asctime)s %(levelname)s:%(message)s')
 
-# Setup GPIO Pins for use with Bi-Colour LED
-led_init()
+# Setup GPIO Pins for use with Bi-Colour LED & Mosfet Power Switch Module
+gpio_init()
 
 # Create RFID reader object
-reader = SimpleMFRC522()
+# reader = SimpleMFRC522()
 
 #Signal that we are up and running
 for led_flash in range(0, 15):
@@ -81,8 +82,9 @@ try:
     else:
       uid = 0
     authorised = validate_access( uid, data );
-    sleep(2);
+    sleep(5);
     led_off()
+    mosfet_off()
 
 except KeyboardInterrupt:
   GPIO.cleanup()

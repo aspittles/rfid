@@ -45,14 +45,17 @@ def open_door(doorpass):
   response = requests.post('http://192.168.0.210/dyn', headers=headers, data=data)
 
 # Function to Init GPIO for LED
-def led_init():
+def gpio_init():
   # Setup GPIO Pins for use with Bi-Colour LED
+  # And MOSFET Power Switch Module
   # Use physical pin numbering
   GPIO.setmode(GPIO.BOARD)
+  GPIO.setwarnings(False)
 
   # Set pin 29 & 31 to be an output pin and set initial value to low (off)
-  GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW)
-  GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW)
+  GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW) # Short Leg (Cathod)
+  GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW) # Long Leg (Anode)
+  GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW) # Mosfet Trigger
 
 # Function to Turn on LED green
 def led_green():
@@ -69,6 +72,14 @@ def led_off():
   GPIO.output(29, GPIO.LOW) # Turn off
   GPIO.output(31, GPIO.LOW) # Turn off
 
+# Function to Turn on Mosfet Power Switch
+def mosfet_on():
+  GPIO.output(22, GPIO.HIGH) # Turn on
+
+# Function to Turn off Mosfet Power Switch
+def mosfet_off():
+  GPIO.output(22, GPIO.LOW) # Turn off
+
 # Function to get Raspberry Pi CPU Temp
 def get_temp():
     """Get the core temperature.
@@ -84,4 +95,3 @@ def get_temp():
         return float(temp_str.split('=')[1].split('\'')[0])
     except (IndexError, ValueError):
         raise RuntimeError('Could not parse temperature output.')
-

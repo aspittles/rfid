@@ -1,8 +1,10 @@
 import subprocess, logging, RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 from time import sleep # Import the sleep function from the time module
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
-GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW) # Set pin 8 to be an output pin and set initial value to low (off)
-GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW) # Set pin 8 to be an output pin and set initial value to low (off)
+GPIO.setup(29, GPIO.OUT, initial=GPIO.LOW) # Set pin 29 (GPIO 5) to be an output pin and set initial value to low (off)
+GPIO.setup(31, GPIO.OUT, initial=GPIO.LOW) # Set pin 31 (GPIO 6) to be an output pin and set initial value to low (off)
+GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW) # Set pin 22 (GPIO 25) to be an output pin and set initial value to low (off)
+
 
 # Enable & configure logging
 logging.basicConfig(filename="/home/pi/rfid/temprature.log",level=logging.INFO,format='%(asctime)s %(levelname)s:%(message)s')
@@ -25,13 +27,18 @@ def get_temp():
 
 try:
   while True: # Run forever
-    
-    GPIO.output(29, GPIO.LOW) # Turn on (Red)
-    GPIO.output(31, GPIO.HIGH) # Turn off (Red)
-    sleep(.2) # Sleep for 0.2 of a second
+
+    #GPIO.output(29, GPIO.LOW) # Red
+    #GPIO.output(31, GPIO.HIGH) # Red
+    GPIO.output(22, GPIO.HIGH) # MOSFET on
+    #sleep(1) # Sleep for 1 second
+    GPIO.output(29, GPIO.HIGH) # Green
+    GPIO.output(31, GPIO.LOW) # Green
+    sleep(5) # Sleep for 1 second
     GPIO.output(29, GPIO.LOW) # Turn off
     GPIO.output(31, GPIO.LOW) # Turn off
-    sleep(4.8) # Sleep for 4.8 seconds
+    GPIO.output(22, GPIO.LOW) # MOSFET off
+    sleep(5) # Sleep for 1 second
     temp = get_temp()
     print(temp)
 

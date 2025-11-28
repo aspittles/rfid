@@ -19,7 +19,7 @@ print("Stopping RFID Service")
 with open('rfid-door-lock.json') as f:
   data = json.load(f)
 
-led_init()
+gpio_init()
 
 # Main Loop
 while True:
