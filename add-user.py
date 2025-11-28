@@ -13,7 +13,8 @@ def write_json(data, filename='rfid-door-lock.json'):
 # Sleep for 3 seconds to ensure RFID service has stopped
 print("Stopping RFID Service")
 sleep(3)
-print("Stopping RFID Service")
+print("RFID Service Stopped")
+print("")
 
 # Read the config file and store in memory
 with open('rfid-door-lock.json') as f:

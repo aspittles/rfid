@@ -59,7 +59,7 @@ gpio_init()
 # reader = SimpleMFRC522()
 
 #Signal that we are up and running
-for led_flash in range(0, 15):
+for led_flash in range(0, 30):
   led_green()
   sleep(0.05)
   led_red()
