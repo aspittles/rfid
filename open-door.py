@@ -17,6 +17,8 @@ temp = get_temp()
 led_green()
 logging.info("ALLOW: Remote Door Open")
 logging.info("Raspberry Pi Temp: " + str(temp))
+print("**** Door Open ****")
+print("This window will auto close in 5 Seconds")
 mosfet_on() # Send 12V power to door Solenoid to open door
 sleep(5);
 led_off()
