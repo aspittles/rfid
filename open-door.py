@@ -4,7 +4,7 @@ from time import sleep
 from modules import *
 
 # Read the config file and store in memory
-with open('/home/pi/rfid/rfid-door-lock.json') as f:
+with open('/home/aspittles/rfid/config/rfid-door-lock.json') as f:
   data = json.load(f)
 
 # Enable & configure logging

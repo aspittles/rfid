@@ -1,6 +1,6 @@
 rfid
 clear
-sh sysinfo.sh
+sh ~/rfid/menu/sysinfo.sh
 echo "    $(tput setaf 2)Door Lock Service$(tput sgr0)"
 echo "    1. Status"
 echo "    2. Restart"

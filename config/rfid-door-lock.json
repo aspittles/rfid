@@ -1,0 +1,21 @@
+{
+    "config": {
+        "log_level": "INFO",
+        "log_file": "/home/aspittles/rfid/config/door-access.log",
+        "reader": "PN532",
+        "open_door": false,
+        "door_pass": "<Password>"
+    },
+    "users": [
+        {
+            "uid": "1234567890",
+            "created": "2020-08-09 21:01:52",
+            "lastEntered": "",
+            "keyType": "KeyCard",
+            "active": true,
+            "firstName": "User1",
+            "lastName": "Person1",
+            "notes": ""
+        }
+    ]
+}

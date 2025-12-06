@@ -5,7 +5,7 @@ Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/pi/rfid/rfid-read-validate.py
+ExecStart=/usr/bin/python3 /home/aspittles/rfid/rfid-read-validate.py
 StandardInput=tty-force
 Environment=SYSTEMD_LOG_LEVEL=debug
 Restart=on-failure

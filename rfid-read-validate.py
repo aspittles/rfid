@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import sys, logging, json, datetime, requests, subprocess
 from time import sleep
-sys.path.append('/home/pi/rfid/MFRC522-python')
+sys.path.append('/home/aspittles/rfid/MFRC522-python')
 from mfrc522 import SimpleMFRC522
-sys.path.append('/home/pi/rfid/py532lib-master')
+sys.path.append('/home/aspittles/rfid/py532lib-master')
 from py532lib.i2c import *
 from py532lib.frame import *
 from py532lib.constants import *
@@ -31,7 +31,7 @@ def validate_access( uid, data ):
       logging.debug((data["users"][record_num]))
       now = datetime.datetime.now()
       data["users"][record_num]["lastEntered"] = now.strftime("%Y-%m-%d %H:%M:%S")
-      with open('/home/pi/rfid/rfid-door-lock.json', 'w') as f:
+      with open('/home/aspittles/rfid/config/rfid-door-lock.json', 'w') as f:
         json.dump(data, f, indent=4)
       temp = get_temp()
       logging.info("Raspberry Pi Temp: " + str(temp))
@@ -46,7 +46,7 @@ def validate_access( uid, data ):
   return authorised;
 
 # Read the config file and store in memory
-with open('/home/pi/rfid/rfid-door-lock.json') as f:
+with open('/home/aspittles/rfid/config/rfid-door-lock.json') as f:
   data = json.load(f)
 
 # Enable & configure logging

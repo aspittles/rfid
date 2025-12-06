@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import sys, logging, json, datetime, requests, subprocess
 from time import sleep
-sys.path.append('/home/pi/rfid/MFRC522-python')
+sys.path.append('/home/aspittles/rfid/MFRC522-python')
 from mfrc522 import SimpleMFRC522
-sys.path.append('/home/pi/rfid/py532lib-master')
+sys.path.append('/home/aspittles/rfid/py532lib-master')
 from py532lib.i2c import *
 from py532lib.frame import *
 from py532lib.constants import *

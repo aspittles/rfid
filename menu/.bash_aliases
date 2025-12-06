@@ -1,0 +1,10 @@
+alias rfid="cd ~/rfid/"
+alias open="python3 ~/rfid/open-door.py"
+alias temp='vcgencmd measure_temp'
+alias 0="sh ~/rfid/menu/menu.sh"
+alias 1="sh ~/rfid/menu/status-service.sh"
+alias 2="sh ~/rfid/menu/restart-service.sh"
+alias 3="sh ~/rfid/menu/start-service.sh"
+alias 4="sh ~/rfid/menu/stop-service.sh"
+alias 5="sh ~/rfid/menu/add-user.sh"
+alias 6="tail --lines=20 ~/rfid/config/door-access.log"
