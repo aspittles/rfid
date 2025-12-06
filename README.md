@@ -106,6 +106,21 @@ git clone https://github.com/HubertD/py532lib.git py532lib-master
 pip3 install RPi.GPIO requests
 ```
 
+Notes to be sorted
+Raspberry Pi OS Lite (64bit) - Debian Trixie no desktop
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo raspi-config nonint do_i2c 0
+sudo apt install python3-rpi.gpio git -y
+git clone https://github.com/aspittles/rfid.git -b file-restructure 
+cp ~/rfid/menu/.bash_aliases ~
+echo 'sh ~/rfid/menu/menu.sh' >> ~/.bashrc
+sh ~/rfid/menu/deploy-service.sh
+exec bash
+```
+
+
+
 ## Usage
 
 Run the main script:
