@@ -1,4 +1,4 @@
-/config/door-access.log
-/config/door-access-archive-*.log
-/config/rfid-door-lock.json
+config/door-access.log
+config/door-access-archive-*.log
+config/rfid-door-lock.json
 __pycache__/

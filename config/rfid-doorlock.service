@@ -5,8 +5,8 @@ Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /opt/rfid_door_lock/rfid-read-validate.py
-WorkingDirectory=/opt/rfid_door_lock
+ExecStart=/usr/bin/python3 /opt/rfid-door-lock/rfid-read-validate.py
+WorkingDirectory=/opt/rfid-door-lock
 StandardInput=tty-force
 Environment=SYSTEMD_LOG_LEVEL=debug
 Restart=on-failure

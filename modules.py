@@ -3,7 +3,7 @@ import sys, logging, json, datetime, requests, subprocess, os
 from time import sleep
 
 # Base application directory
-APP_DIR = "/opt/rfid_door_lock"
+APP_DIR = "/opt/rfid-door-lock"
 
 sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
 from mfrc522 import SimpleMFRC522
@@ -11,9 +11,6 @@ sys.path.append(os.path.join(APP_DIR, 'py532lib-master'))
 from py532lib.i2c import *
 from py532lib.frame import *
 from py532lib.constants import *
-
-# Create RFID reader object for RC522
-reader = SimpleMFRC522()
 
 # Function to Read the RFID card Using RC522 Reader
 def rfid_read_RC522():

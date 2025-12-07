@@ -3,7 +3,7 @@ import sys, json, datetime, os
 from time import sleep
 
 # Base application directory
-APP_DIR = "/opt/rfid_door_lock"
+APP_DIR = "/opt/rfid-door-lock"
 CONFIG_FILE = os.path.join(APP_DIR, 'config/rfid-door-lock.json')
 
 sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))

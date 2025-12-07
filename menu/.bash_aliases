@@ -1,5 +1,5 @@
 alias rfid="cd /opt/rfid-door-lock/"
-alias open="python3 /opt/rfid-door-lock/open-door.py"
+alias open="sudo python3 /opt/rfid-door-lock/open-door.py"
 alias temp='vcgencmd measure_temp'
 alias 0="sh /opt/rfid-door-lock/menu/menu.sh"
 alias 1="sh /opt/rfid-door-lock/menu/status-service.sh"

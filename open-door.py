@@ -3,7 +3,7 @@ import sys, logging, json, datetime, requests, subprocess, os
 from time import sleep
 
 # Base application directory
-APP_DIR = "/opt/rfid_door_lock"
+APP_DIR = "/opt/rfid-door-lock"
 
 sys.path.append(APP_DIR)
 from modules import *
