@@ -1,13 +1,19 @@
 import RPi.GPIO as GPIO
-import sys, json, datetime
+import sys, json, datetime, os
 from time import sleep
-sys.path.append('/home/aspittles/rfid/MFRC522-python')
+
+# Base application directory
+APP_DIR = "/opt/rfid_door_lock"
+CONFIG_FILE = os.path.join(APP_DIR, 'config/rfid-door-lock.json')
+
+sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
 from mfrc522 import SimpleMFRC522
+sys.path.append(APP_DIR)
 from modules import *
 
 # function to add to JSON
-def write_json(data, filename='/home/aspittles/rfid/config/rfid-door-lock.json'):
-    with open(filename,'w') as f:
+def write_json(data, filename=CONFIG_FILE):
+    with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
 
 # Sleep for 3 seconds to ensure RFID service has stopped
@@ -17,7 +23,7 @@ print("RFID Service Stopped")
 print("")
 
 # Read the config file and store in memory
-with open('/home/aspittles/rfid/config/rfid-door-lock.json') as f:
+with open(CONFIG_FILE) as f:
   data = json.load(f)
 
 gpio_init()
@@ -35,16 +41,11 @@ while True:
   lastname = input('Enter Last Name:')
   keytype = input('Enter Key Type (KeyFob/KeyCard/CreditCard/OpalCard/Other):')
   notes = input('Enter Notes:')
-
   uid = rfid_read_PN532()
-
   led_green()
-
-  with open('/home/aspittles/rfid/config/rfid-door-lock.json') as json_file:
+  with open(CONFIG_FILE) as json_file:
     data = json.load(json_file)
-
   users = data["users"]
-
   # python object to be appended
   now = datetime.datetime.now()
   new_user = {'uid': str(uid),
@@ -56,19 +57,15 @@ while True:
               'lastName': lastname,
               'notes': notes
              }
-
   print(new_user)
-
   # appending data to emp_details
   users.append(new_user)
   write_json(data)
-
   sleep(2)
   led_off()
 
 GPIO.cleanup()
 sleep(3)
-
 
 # {
 #     "users": [

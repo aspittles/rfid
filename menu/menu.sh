@@ -1,15 +1,18 @@
 rfid
 clear
-sh ~/rfid/menu/sysinfo.sh
+sh /opt/rfid-door-lock/menu/sysinfo.sh
 echo "    $(tput setaf 2)Door Lock Service$(tput sgr0)"
 echo "    1. Status"
 echo "    2. Restart"
 echo "    3. Start"
 echo "    4. Stop"
 echo
-echo "    5. Add New User"
+echo "    5. Deploy Service"
+echo "    6. Remove Service"
 echo
-echo "    6. Show last 20 Log Entries"
+echo "    7. Add New User"
+echo
+echo "    8. Show last 20 Log Entries"
 echo
 echo "    0. This Menu"
 echo

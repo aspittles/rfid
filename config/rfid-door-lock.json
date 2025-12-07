@@ -1,7 +1,7 @@
 {
     "config": {
         "log_level": "INFO",
-        "log_file": "/home/aspittles/rfid/config/door-access.log",
+        "log_file": "/opt/rfid-door-lock/rfid/config/door-access.log",
         "reader": "PN532",
         "open_door": false,
         "door_pass": "<Password>"
