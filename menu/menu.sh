@@ -11,8 +11,8 @@ echo "    5. Deploy Service"
 echo "    6. Remove Service"
 echo
 echo "    7. Add New User"
-echo
 echo "    8. Show last 20 Log Entries"
+echo "    9. Open Door"
 echo
 echo "    0. This Menu"
 echo
