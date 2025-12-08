@@ -3,7 +3,7 @@
         "log_level": "INFO",
         "log_file": "/opt/rfid-door-lock/config/door-access.log",
         "reader": "PN532",
-        "open_door": false,
+        "open_door": true,
         "door_pass": "<Password>"
     },
     "users": [
