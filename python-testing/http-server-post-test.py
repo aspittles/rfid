@@ -33,3 +33,10 @@ if __name__ == '__main__':
 
     server.shutdown()
     print('Server stopped.')
+
+# Testing examples
+#
+# Without token - returns 401 Unauthorized
+# curl -X POST http://localhost:8000
+# With token - returns Hello World
+# curl -X POST -H "Authorization: Bearer my-secret-token" http://localhost:8000
