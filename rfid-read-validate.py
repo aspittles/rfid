@@ -1,9 +1,11 @@
 import RPi.GPIO as GPIO
-import sys, logging, json, datetime, requests, subprocess, os
+import sys, logging, json, datetime, requests, subprocess, os, threading
 from time import sleep
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Base application directory
 APP_DIR = "/opt/rfid-door-lock"
+SECRET_TOKEN = 'my-secret-token'
 
 sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
 from mfrc522 import SimpleMFRC522
@@ -60,11 +62,50 @@ logging.basicConfig(filename=(data["config"]["log_file"]), level=logging.INFO, f
 # Setup GPIO Pins for use with Bi-Colour LED & Mosfet Power Switch Module
 gpio_init()
 
+# Setup HTTP Server for Open Door API call
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+#        if self.path == '/status':
+#            self.send_response(200)
+#            self.send_header('Content-Type', 'text/plain')
+#            self.end_headers()
+#            self.wfile.write(b'Hello from GET')
+#        else:
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'Not Found')
+    def do_POST(self):
+        if self.path == '/open':
+            token = self.headers.get('Authorization')
+
+            if token != f'Bearer {SECRET_TOKEN}':
+                self.send_response(401)
+                self.send_header('Content-Type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(b'Unauthorized')
+                return
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'Door Open')
+            led_green()
+            mosfet_on()  # Send 12V power to door Solenoid to open door
+            sleep(5)
+            led_off()
+            mosfet_off()
+        else:
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'Not Found')
+
 # Create RFID reader object
 # reader = SimpleMFRC522()
 
 # Signal that we are up and running
-for led_flash in range(0, 30):
+for led_flash in range(0, 15):
   led_green()
   sleep(0.05)
   led_red()
@@ -76,6 +117,12 @@ temp = get_temp()
 logging.info("*******************************************")
 logging.info("System Restarted")
 logging.info("Raspberry Pi Temp: " + str(temp))
+
+# Startup HTTP Server
+server = HTTPServer(('0.0.0.0', 8000), Handler)
+thread = threading.Thread(target=server.serve_forever)
+thread.daemon = True
+thread.start()
 
 # Main Loop
 try:
@@ -93,3 +140,4 @@ try:
 
 except KeyboardInterrupt:
   GPIO.cleanup()
+  server.shutdown()
