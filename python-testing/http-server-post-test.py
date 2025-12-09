@@ -51,3 +51,15 @@ if __name__ == '__main__':
     
     server.shutdown()
     print('Server stopped.')
+
+# Testing Curls
+#
+# GET /status - no token required
+# curl http://localhost:8000/status
+#
+# POST /open - token required
+# curl -X POST -H "Authorization: Bearer my-secret-token" http://localhost:8000/open
+#
+# Invalid paths return 404
+# curl http://localhost:8000/other
+#
