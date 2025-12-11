@@ -5,7 +5,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Base application directory
 APP_DIR = "/opt/rfid-door-lock"
-SECRET_TOKEN = 'my-secret-token'
 
 sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
 from mfrc522 import SimpleMFRC522
@@ -63,6 +62,8 @@ logging.basicConfig(filename=(data["config"]["log_file"]), level=logging.INFO, f
 gpio_init()
 
 # Setup HTTP Server for Open Door API call
+SECRET_TOKEN = data["config"]["token"]
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 #        if self.path == '/status':
@@ -119,7 +120,8 @@ logging.info("System Restarted")
 logging.info("Raspberry Pi Temp: " + str(temp))
 
 # Startup HTTP Server
-server = HTTPServer(('0.0.0.0', 8000), Handler)
+server = HTTPServer((data["config"]["http_server_host"], data["config"]["http_server_port"]), Handler)
+# data["config"]["http_server_ip"]
 thread = threading.Thread(target=server.serve_forever)
 thread.daemon = True
 thread.start()
