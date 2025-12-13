@@ -112,9 +112,17 @@ app = App(token=data["config"]["slack_bot_token"])
 @app.message(re.compile(r"^open$", re.IGNORECASE))
 def handle_open(message, say, client):
     user_info = client.users_info(user=message["user"])
-    name = user_info["user"]["real_name"]
-    print(name)
+    slack_name = user_info["user"]["real_name"]
+    logging.info("ALLOW: Access by: Slack Door Channel (" + slack_name + ")")
     say("Station Door Opened")
+    print(slack_name)
+    temp = get_temp()
+    logging.info("Raspberry Pi Temp: " + str(temp))
+    led_green()
+    mosfet_on()  # Send 12V power to door Solenoid to open door
+    sleep(5)
+    led_off()
+    mosfet_off()
 
 @app.message(re.compile(r".*"))
 def handle_unknown(message, say):
