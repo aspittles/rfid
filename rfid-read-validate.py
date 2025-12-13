@@ -1,7 +1,11 @@
+#!/usr/bin/env python3
+
 import RPi.GPIO as GPIO
-import sys, logging, json, datetime, requests, subprocess, os, threading
+import sys, logging, json, datetime, requests, subprocess, os, threading, re
 from time import sleep
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 # Base application directory
 APP_DIR = "/opt/rfid-door-lock"
@@ -102,6 +106,24 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'Not Found')
 
+# Setup Slack integration
+app = App(token=data["config"]["slack_bot_token"])
+
+@app.message(re.compile(r"^open$", re.IGNORECASE))
+def handle_open(message, say, client):
+    user_info = client.users_info(user=message["user"])
+    name = user_info["user"]["real_name"]
+    print(name)
+    say("Station Door Opened")
+
+@app.message(re.compile(r".*"))
+def handle_unknown(message, say):
+    say("I don't understand, please say 'open' to open the station door")
+
+@app.event("message")
+def handle_message_events(body, logger):
+    pass
+
 # Create RFID reader object
 # reader = SimpleMFRC522()
 
@@ -121,10 +143,13 @@ logging.info("Raspberry Pi Temp: " + str(temp))
 
 # Startup HTTP Server
 server = HTTPServer((data["config"]["http_server_host"], data["config"]["http_server_port"]), Handler)
-# data["config"]["http_server_ip"]
 thread = threading.Thread(target=server.serve_forever)
 thread.daemon = True
 thread.start()
+
+# Startup
+handler = SocketModeHandler(app, data["config"]["slack_app_token"])
+handler.connect()
 
 # Main Loop
 try:
@@ -143,3 +168,4 @@ try:
 except KeyboardInterrupt:
   GPIO.cleanup()
   server.shutdown()
+
