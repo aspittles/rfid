@@ -117,6 +117,7 @@ sudo git clone https://github.com/aspittles/rfid.git -b slack-open /opt/rfid-doo
 cp /opt/rfid-door-lock/menu/.bash_aliases ~
 echo 'sh /opt/rfid-door-lock/menu/menu.sh' >> ~/.bashrc
 exec bash 
+echo "Update /opt/rfid-door-lock/rfid-door-lock.json with "xoxb-your-bot-token" & "xapp-your-app-token"
 echo "Deploy the Service using option 5"
 echo "Restart the Service after deploy using option 2"
 echo "Watch for Flashing lights"
