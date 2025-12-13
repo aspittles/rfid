@@ -111,7 +111,8 @@ Raspberry Pi OS Lite (64bit) - Debian Trixie no desktop
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo raspi-config nonint do_i2c 0
-sudo apt install python3-rpi.gpio git -y
+sudo apt install python3-rpi.gpio git python3-pip -y
+sudo pip3 install slack-bolt --break-system-packages --root-user-action
 sudo git clone https://github.com/aspittles/rfid.git -b slack-open /opt/rfid-door-lock
 cp /opt/rfid-door-lock/menu/.bash_aliases ~
 echo 'sh /opt/rfid-door-lock/menu/menu.sh' >> ~/.bashrc
