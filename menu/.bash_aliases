@@ -1,0 +1,13 @@
+alias rfid="cd /opt/rfid-door-lock/"
+alias open="sudo python3 /opt/rfid-door-lock/open-door.py"
+alias temp='vcgencmd measure_temp'
+alias 0="sh /opt/rfid-door-lock/menu/menu.sh"
+alias 1="sh /opt/rfid-door-lock/menu/status-service.sh"
+alias 2="sh /opt/rfid-door-lock/menu/restart-service.sh"
+alias 3="sh /opt/rfid-door-lock/menu/start-service.sh"
+alias 4="sh /opt/rfid-door-lock/menu/stop-service.sh"
+alias 5="sh /opt/rfid-door-lock/menu/deploy-service.sh"
+alias 6="sh /opt/rfid-door-lock/menu/remove-service.sh"
+alias 7="sh /opt/rfid-door-lock/menu/add-user.sh"
+alias 8="tail --lines=20 /opt/rfid-door-lock/config/door-access.log"
+alias 9="sudo python3 /opt/rfid-door-lock/open-door.py"

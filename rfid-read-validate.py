@@ -1,16 +1,21 @@
 import RPi.GPIO as GPIO
-import sys, logging, json, datetime, requests, subprocess
+import sys, logging, json, datetime, requests, subprocess, os
 from time import sleep
-sys.path.append('/home/pi/rfid/MFRC522-python')
+
+# Base application directory
+APP_DIR = "/opt/rfid-door-lock"
+
+sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
 from mfrc522 import SimpleMFRC522
-sys.path.append('/home/pi/rfid/py532lib-master')
+sys.path.append(os.path.join(APP_DIR, 'py532lib-master'))
 from py532lib.i2c import *
 from py532lib.frame import *
 from py532lib.constants import *
+sys.path.append(APP_DIR)
 from modules import *
 
 # Function to Validate the Card UID against JSON list of allowed users
-def validate_access( uid, data ):
+def validate_access(uid, data):
   # Check if UID is defined
   found = False
   for i in range(0, len(data["users"])):
@@ -26,12 +31,12 @@ def validate_access( uid, data ):
       if (data["config"]["open_door"]):
         # doorpass = data["config"]["door_pass"]
         # open_door(doorpass) # Old Bio lock method to open door
-        mosfet_on() # Send 12V power to door Solenoid to open door
+        mosfet_on()  # Send 12V power to door Solenoid to open door
       logging.info("ALLOW: Access by: " + str(uid) + " (" + name + ")")
       logging.debug((data["users"][record_num]))
       now = datetime.datetime.now()
       data["users"][record_num]["lastEntered"] = now.strftime("%Y-%m-%d %H:%M:%S")
-      with open('/home/pi/rfid/rfid-door-lock.json', 'w') as f:
+      with open(os.path.join(APP_DIR, 'config/rfid-door-lock.json'), 'w') as f:
         json.dump(data, f, indent=4)
       temp = get_temp()
       logging.info("Raspberry Pi Temp: " + str(temp))
@@ -43,14 +48,14 @@ def validate_access( uid, data ):
     authorised = False
     logging.info("BLOCK: Access attempt by: " + str(uid))
     led_red()
-  return authorised;
+  return authorised
 
 # Read the config file and store in memory
-with open('/home/pi/rfid/rfid-door-lock.json') as f:
+with open(os.path.join(APP_DIR, 'config/rfid-door-lock.json')) as f:
   data = json.load(f)
 
 # Enable & configure logging
-logging.basicConfig(filename=(data["config"]["log_file"]),level=logging.INFO,format='%(asctime)s %(levelname)s:%(message)s')
+logging.basicConfig(filename=(data["config"]["log_file"]), level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 
 # Setup GPIO Pins for use with Bi-Colour LED & Mosfet Power Switch Module
 gpio_init()
@@ -58,7 +63,7 @@ gpio_init()
 # Create RFID reader object
 # reader = SimpleMFRC522()
 
-#Signal that we are up and running
+# Signal that we are up and running
 for led_flash in range(0, 30):
   led_green()
   sleep(0.05)
@@ -81,8 +86,8 @@ try:
       uid = rfid_read_PN532()
     else:
       uid = 0
-    authorised = validate_access( uid, data );
-    sleep(5);
+    authorised = validate_access(uid, data)
+    sleep(5)
     led_off()
     mosfet_off()
 
