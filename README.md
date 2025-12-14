@@ -113,24 +113,28 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 2. Clone the required RFID reader libraries:
 ```bash
 sudo apt update && sudo apt upgrade -y
-sudo raspi-config nonint do_i2c 0
 sudo apt install python3-rpi.gpio git python3-pip -y
 sudo pip3 install slack-bolt --break-system-packages
 ```
 
-3. Download this git repo to `/opt/rfid-door-lock`
+3. Enable automatic loading of I2C kernel module on the the Raspberry Pi 
+```bash
+sudo raspi-config nonint do_i2c 0
+```
+
+4. Download this git repo to `/opt/rfid-door-lock`
 ```bash
 sudo git clone https://github.com/aspittles/rfid.git /opt/rfid-door-lock
 ```
 
-4. Add the menu system to show on logon and restart bash
+5. Add the menu system to show on logon and restart bash
 ```bash
 cp /opt/rfid-door-lock/menu/.bash_aliases ~
 echo 'sh /opt/rfid-door-lock/menu/menu.sh' >> ~/.bashrc
 exec bash
 ```
 
-5. Door Lock Menu, Use option 0 to show this menu
+6. Door Lock Menu, Use option 0 to show this menu
 ```Text
     Door Lock Menu
     1. Status
@@ -148,7 +152,7 @@ exec bash
     0. This Menu
 ```
 
-6. Update `/opt/rfid-door-lock/rfid-door-lock.json` with the Bearer `token`
+7. Update `/opt/rfid-door-lock/rfid-door-lock.json` with the Bearer `token`
    
 8. Update `/opt/rfid-door-lock/rfid-door-lock.json` with the Slack `xoxb-your-bot-token` & `xapp-your-app-token`
    See **Slack App Setup** section below
