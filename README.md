@@ -116,7 +116,7 @@ sudo pip3 install slack-bolt --break-system-packages
 
 3. Download this git repo to `/opt/rfid-door-lock`
 ```bash
-sudo git clone https://github.com/aspittles/rfid.git -b slack-open /opt/rfid-door-lock
+sudo git clone https://github.com/aspittles/rfid.git /opt/rfid-door-lock
 ```
 
 4. Add the menu system to show on logon and restart bash
