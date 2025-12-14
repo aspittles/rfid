@@ -62,6 +62,20 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 }
 ```
 
+| Setting | Description |
+|---------|-------------|
+| `log_level` | Log file log level INFO or DEBUG |
+| `log_file` | Path to the access log file |
+| `reader` | PN532 (Old setting) |
+| `open_door` | Enable/disable door unlocking (useful for testing) |
+| `open_door` |  Old bio lock door system password (Old setting) |
+| `http_server_host` | IP address for the HTTP API |
+| `http_server_port` | Port for the HTTP API |
+| `token` | Bearer token for HTTP API authentication |
+| `slack_bot_token` | Slack bot OAuth token (starts with `xoxb-`) |
+| `slack_app_token` | Slack app-level token for Socket Mode (starts with `xapp-`) |
+
+
 ## Features
 
 ### Access Control
@@ -213,6 +227,41 @@ All events are logged with timestamps including:
 - Blocked access attempts (deactivated cards)
 - Unknown card attempts
 - System temperature readings
+
+## File Structure
+
+```
+/opt/rfid-door-lock/
+├── rfid-read-validate.py    # Main application
+├── modules.py               # Shared hardware functions
+├── add-user.py              # User enrollment utility
+├── rfid-doorlock.service    # systemd service file
+├── py532lib-master/         # PN532 I2C library
+└── config/
+    ├── rfid-door-lock.json  # Configuration and user database
+    └── door-access.log      # Access log
+```
+
+## Troubleshooting
+
+**PN532 not detected:**
+- Verify I2C is enabled: `sudo i2cdetect -y 1` (should show device at address 0x24)
+- Check wiring connections
+- Ensure the PN532 is set to I2C mode (check DIP switches)
+
+**LED not working:**
+- Verify GPIO pin numbers match your wiring
+- Check LED polarity
+
+**Door not unlocking:**
+- Test the MOSFET module with `gpio_init()` and `mosfet_on()` in Python
+- Verify 12V power supply is connected
+- Check solenoid wiring
+
+**Slack bot not responding:**
+- Verify both tokens are correct in the config
+- Ensure the bot is invited to the channel
+- Check that Socket Mode is enabled in the Slack app settings
 
 ## Notes
 
