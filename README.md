@@ -6,6 +6,30 @@ A Raspberry Pi-based access control system that manages door entry through RFID 
 
 This system reads RFID cards using a PN532 reader, validates them against a list of authorized users, and controls door access through a MOSFET-driven solenoid lock. Visual feedback is provided through a bi-color LED, and all access attempts are logged.
 
+## Features
+
+### Access Control
+- **RFID Authentication** — Validates cards/fobs against a user database using PN532 reader
+- **HTTP API** — Remote door control with bearer token authentication
+- **Slack Integration** — Open the door by sending "open" in a configured Slack channel
+- **Access Logging** — Tracks all access attempts with timestamps
+- **User Management** — Enroll and manage users via command-line utility
+
+### Visual Feedback
+- **Green LED** - Access granted
+- **Red LED** - Access denied
+- **Flashing sequence** - System startup indicator
+
+### Door Control
+- Activates MOSFET to supply 12V to door solenoid
+- Configurable door opening via JSON config
+- 5-second door unlock duration
+
+### System Monitoring
+- Logs Raspberry Pi CPU temperature
+- Comprehensive access logging with timestamps
+- User activity tracking
+
 ## Hardware Requirements
 
 - Raspberry Pi (tested on Models 3B & 4B)
@@ -78,31 +102,6 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 | `token` | Bearer token for HTTP API authentication |
 | `slack_bot_token` | Slack bot OAuth token (starts with `xoxb-`) |
 | `slack_app_token` | Slack app-level token for Socket Mode (starts with `xapp-`) |
-
-
-## Features
-
-### Access Control
-- **RFID Authentication** — Validates cards/fobs against a user database using PN532 reader
-- **HTTP API** — Remote door control with bearer token authentication
-- **Slack Integration** — Open the door by sending "open" in a configured Slack channel
-- **Access Logging** — Tracks all access attempts with timestamps
-- **User Management** — Enroll and manage users via command-line utility
-
-### Visual Feedback
-- **Green LED** - Access granted
-- **Red LED** - Access denied
-- **Flashing sequence** - System startup indicator
-
-### Door Control
-- Activates MOSFET to supply 12V to door solenoid
-- Configurable door opening via JSON config
-- 5-second door unlock duration
-
-### System Monitoring
-- Logs Raspberry Pi CPU temperature
-- Comprehensive access logging with timestamps
-- User activity tracking
 
 ## Installation
 
