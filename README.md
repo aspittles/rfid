@@ -15,6 +15,7 @@ This system reads RFID cards using a PN532 reader, validates them against a list
 - 12V door solenoid lock
 - System Box (HB6219)
 - 3D Printed Mounting Plate (https://www.thingiverse.com/thing:7235082)
+
 See documentation folder in this repo for more information.
 
 ## GPIO Pin Assignments
