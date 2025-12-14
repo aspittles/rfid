@@ -1,7 +1,7 @@
 rfid
 clear
 sh /opt/rfid-door-lock/menu/sysinfo.sh
-echo "    $(tput setaf 2)Door Lock Service$(tput sgr0)"
+echo "    $(tput setaf 2)Door Access Control System$(tput sgr0)"
 echo "    1. Status"
 echo "    2. Restart"
 echo "    3. Start"
