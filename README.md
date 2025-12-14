@@ -232,14 +232,16 @@ All events are logged with timestamps including:
 
 ```
 /opt/rfid-door-lock/
-├── rfid-read-validate.py    # Main application
-├── modules.py               # Shared hardware functions
-├── add-user.py              # User enrollment utility
-├── rfid-doorlock.service    # systemd service file
-├── py532lib-master/         # PN532 I2C library
-└── config/
-    ├── rfid-door-lock.json  # Configuration and user database
-    └── door-access.log      # Access log
+├── rfid-read-validate.py       # Main application
+├── modules.py                  # Shared hardware functions
+├── add-user.py                 # User enrollment utility
+├── py532lib-master/            # PN532 I2C library
+├── menu/                       # Bash Menu files
+├── documentation/              # Hardware documentation files
+└── config/                     # Config files
+    ├── rfid-door-lock.json     # Configuration and user database
+    ├── rfid-doorlock.service   # systemd service file
+    └── door-access.log         # Access log
 ```
 
 ## Troubleshooting
