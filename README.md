@@ -1,19 +1,18 @@
 # RFID Door Access Control System
 
-A Raspberry Pi-based RFID door access control system that validates cards against a JSON database and controls door entry via GPIO outputs.
+A Raspberry Pi-based access control system that manages door entry through RFID cards/fobs, with remote access capabilities via HTTP API and Slack integration.
 
 ## Overview
 
-This system reads RFID cards using either RC522 or PN532 readers, validates them against a list of authorized users, and controls door access through a MOSFET-driven solenoid lock. Visual feedback is provided through a bi-color LED, and all access attempts are logged.
+This system reads RFID cards using a PN532 reader, validates them against a list of authorized users, and controls door access through a MOSFET-driven solenoid lock. Visual feedback is provided through a bi-color LED, and all access attempts are logged.
 
 ## Hardware Requirements
 
 - Raspberry Pi (tested on models with GPIO)
-- RFID Reader (either RC522 or PN532)
+- RFID Reader (PN532)
 - Bi-color LED (red/green)
 - MOSFET power switch module
 - 12V door solenoid lock
-- Appropriate resistors and wiring
 
 ## GPIO Pin Assignments
 
@@ -30,38 +29,36 @@ This system reads RFID cards using either RC522 or PN532 readers, validates them
   <img src="./images/GPIO-Pinout.jpg" alt="GPIO-Pinout">
 </p>
 
-## Software Dependencies
-
-```bash
-# Required Python libraries
-RPi.GPIO
-requests
-
-# RFID reader libraries
-MFRC522-python (for RC522 reader)
-py532lib (for PN532 reader)
-```
-
 ## Configuration File
 
-The system requires a JSON configuration file at `/home/pi/rfid/rfid-door-lock.json` with the following structure:
+The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfid-door-lock.json` with the following structure:
 
 ```json
 {
-  "config": {
-    "reader": "RC522 or PN532",
-    "open_door": true,
-    "log_file": "/path/to/logfile.log"
-  },
-  "users": [
-    {
-      "uid": "card_uid_number",
-      "firstName": "John",
-      "lastName": "Doe",
-      "active": true,
-      "lastEntered": "2024-01-01 12:00:00"
-    }
-  ]
+    "config": {
+        "log_level": "INFO",
+        "log_file": "/opt/rfid-door-lock/config/door-access.log",
+        "reader": "PN532",
+        "open_door": true,
+        "door_pass": "<Password>",
+        "http_server_host": "0.0.0.0",
+        "http_server_port": 8000,
+        "token": "my-secret-token",
+        "slack_bot_token": "xoxb-your-bot-token",
+        "slack_app_token": "xapp-your-app-token"
+    },
+    "users": [
+        {
+            "uid": "1234567890",
+            "created": "2020-08-09 21:01:52",
+            "lastEntered": "",
+            "keyType": "KeyCard",
+            "active": true,
+            "firstName": "User1",
+            "lastName": "Person1",
+            "notes": ""
+        }
+    ]
 }
 ```
 
@@ -72,6 +69,7 @@ The system requires a JSON configuration file at `/home/pi/rfid/rfid-door-lock.j
 - Supports both active and deactivated card states
 - Tracks last entry time for each user
 - Logs all access attempts (authorized and unauthorized)
+- 
 
 ### Visual Feedback
 - **Green LED**: Access granted
@@ -112,15 +110,15 @@ Raspberry Pi OS Lite (64bit) - Debian Trixie no desktop
 sudo apt update && sudo apt upgrade -y
 sudo raspi-config nonint do_i2c 0
 sudo apt install python3-rpi.gpio git python3-pip -y
-sudo pip3 install slack-bolt --break-system-packages --root-user-action
+sudo pip3 install slack-bolt --break-system-packages
 sudo git clone https://github.com/aspittles/rfid.git -b slack-open /opt/rfid-door-lock
 cp /opt/rfid-door-lock/menu/.bash_aliases ~
 echo 'sh /opt/rfid-door-lock/menu/menu.sh' >> ~/.bashrc
-exec bash 
-echo "Update /opt/rfid-door-lock/rfid-door-lock.json with "xoxb-your-bot-token" & "xapp-your-app-token"
-echo "Deploy the Service using option 5"
-echo "Restart the Service after deploy using option 2"
-echo "Watch for Flashing lights"
+exec bash
+# Update /opt/rfid-door-lock/rfid-door-lock.json with 'xoxb-your-bot-token' & 'xapp-your-app-token'
+# Deploy the Service using option 5
+# Restart the Service after deploy using option 2
+# Watch for Flashing lights
 ```
 
 ## Usage
