@@ -130,12 +130,12 @@ exec bash
     0. This Menu
 ```
 
-6. Update /opt/rfid-door-lock/rfid-door-lock.json with 'xoxb-your-bot-token' & 'xapp-your-app-token'
+6. Update /opt/rfid-door-lock/rfid-door-lock.json with 'xoxb-your-bot-token' & 'xapp-your-app-token'.
    See 'Slack App Setup' below
 
-7. Deploy the Service using option 5
+8. Deploy the Service using option 5
 
-8. Restart the Service after deploy using option 2 and watch for Flashing lights
+9. Restart the Service after deploy using option 2 and watch for Flashing lights
 
 ## Usage
 
@@ -182,18 +182,7 @@ curl -X POST http://your-pi-ip:8000/open \
 - `401 Unauthorized` — Invalid or missing token
 - `404 Not Found` — Invalid endpoint
 
-## Logging
-
-All events are logged with timestamps including:
-- System restarts
-- Successful access attempts (with user details)
-- Blocked access attempts (deactivated cards)
-- Unknown card attempts
-- System temperature readings
-
-## Slack App Setup
-
-## Slack App Setup
+### Slack App Setup
 
 1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**
 
@@ -202,52 +191,27 @@ All events are logged with timestamps including:
    - Copy the token (starts with `xapp-`)
 
 3. **Add Bot Permissions** (OAuth & Permissions → Bot Token Scopes):
-   - `channels:history`
-   - `groups:history` (for private channels)
-
-4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
    - `channels:history` - Read messages in public channels
    - `groups:history` - Read messages in private channels
    - `chat:write` - Send messages
+
+4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
+   - `message.channels`
+   - `message.groups`
 
 5. **Install App** to workspace and copy the Bot Token (starts with `xoxb-`)
 
 6. **Invite the bot** to your private channel: `/invite @YourBotName`
 
 
+## Logging
 
-
-
-
-### 1. Create the Slack App
-1. Go to [https://api.slack.com/apps](https://api.slack.com/apps)
-2. Click **Create New App** → **From scratch**
-3. Name it "Door Opener" and select your workspace
-
-### 2. Configure Bot Permissions
-1. Go to **OAuth & Permissions** in the sidebar
-2. Under **Scopes → Bot Token Scopes**, add:
-   - `channels:history` - Read messages in public channels
-   - `groups:history` - Read messages in private channels
-   - `chat:write` - Send messages
-
-### 3. Install the App
-1. Go to **Install App** in the sidebar
-2. Click **Install to Workspace**
-3. Authorize the app
-4. Copy the **Bot User OAuth Token** (starts with `xoxb-`)
-
-### 4. Get Your Signing Secret
-1. Go to **Basic Information** in the sidebar
-2. Under **App Credentials**, copy the **Signing Secret**
-
-### 5. Get Channel ID
-1. In Slack, right-click on your private channel
-2. Click **View channel details**
-3. At the bottom, copy the **Channel ID** (starts with `C`)
-
-### 6. Invite the Bot
-1. In your private channel, type `/invite @Door Opener`
+All events are logged with timestamps including:
+- System restarts
+- Successful access attempts (with user details)
+- Blocked access attempts (deactivated cards)
+- Unknown card attempts
+- System temperature readings
 
 
 ## Notes
