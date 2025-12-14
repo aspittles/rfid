@@ -83,17 +83,16 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 ## Features
 
 ### Access Control
-- Validates RFID cards against a database of authorized users
-- Supports both active and deactivated card states
-- Tracks last entry time for each user
-- Logs all access attempts (authorized and unauthorized)
-- Listens on HTTP port 8000 for /open and correct bearer token
-- Listens on specific slack channel for "Open"
+- **RFID Authentication** — Validates cards/fobs against a user database using PN532 reader
+- **HTTP API** — Remote door control with bearer token authentication
+- **Slack Integration** — Open the door by sending "open" in a configured Slack channel
+- **Access Logging** — Tracks all access attempts with timestamps
+- **User Management** — Enroll and manage users via command-line utility
 
 ### Visual Feedback
-- **Green LED**: Access granted
-- **Red LED**: Access denied
-- **Flashing sequence**: System startup indicator
+- **Green LED** - Access granted
+- **Red LED** - Access denied
+- **Flashing sequence** - System startup indicator
 
 ### Door Control
 - Activates MOSFET to supply 12V to door solenoid
