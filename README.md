@@ -1,4 +1,4 @@
-# RFID Door Access Control System
+# RFID/API/Slack Door Access Control System
 
 A Raspberry Pi-based access control system that manages door entry through RFID cards/fobs, with remote access capabilities via HTTP API and Slack integration.
 
@@ -8,7 +8,7 @@ This system reads RFID cards using a PN532 reader, validates them against a list
 
 ## Hardware Requirements
 
-- Raspberry Pi (tested on models with GPIO)
+- Raspberry Pi (tested on Models 3B & 4B)
 - RFID Reader (PN532)
 - Bi-color LED (red/green)
 - MOSFET power switch module
@@ -69,7 +69,8 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 - Supports both active and deactivated card states
 - Tracks last entry time for each user
 - Logs all access attempts (authorized and unauthorized)
-- 
+- Listens on HTTP port 8000 for /open and correct bearer token
+- Listens on specific slack channel for "Open"
 
 ### Visual Feedback
 - **Green LED**: Access granted
@@ -88,67 +89,98 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 
 ## Installation
 
-1. Clone the required RFID reader libraries:
-```bash
-cd /home/pi/rfid
-git clone https://github.com/pimylifeup/MFRC522-python.git
-git clone https://github.com/HubertD/py532lib.git py532lib-master
-```
+1. Use Raspberry Pi Imager 2 and create a clean image.
+   Tested with "Raspberry Pi OS Lite (64bit) - Debian Trixie no desktop"
 
-2. Place `rfid-read-validate.py` and `modules.py` in `/home/pi/rfid/`
-
-3. Create your configuration file at `/home/pi/rfid/rfid-door-lock.json`
-
-4. Install Python dependencies:
-```bash
-pip3 install RPi.GPIO requests
-```
-
-Notes to be sorted
-Raspberry Pi OS Lite (64bit) - Debian Trixie no desktop
+2. Clone the required RFID reader libraries:
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo raspi-config nonint do_i2c 0
 sudo apt install python3-rpi.gpio git python3-pip -y
 sudo pip3 install slack-bolt --break-system-packages
+```
+
+3. Download this git repo to `/opt/rfid-door-lock`
+```bash
 sudo git clone https://github.com/aspittles/rfid.git -b slack-open /opt/rfid-door-lock
+```
+
+4. Add the menu system to show on logon and restart bash
+```bash
 cp /opt/rfid-door-lock/menu/.bash_aliases ~
 echo 'sh /opt/rfid-door-lock/menu/menu.sh' >> ~/.bashrc
 exec bash
-# Update /opt/rfid-door-lock/rfid-door-lock.json with 'xoxb-your-bot-token' & 'xapp-your-app-token'
-# Deploy the Service using option 5
-# Restart the Service after deploy using option 2
-# Watch for Flashing lights
 ```
+
+5. Door Lock Menu, Use option 0 to show this menu
+```Text
+    Door Lock Menu
+    1. Status
+    2. Restart
+    3. Start
+    4. Stop
+
+    5. Deploy Service
+    6. Remove Service
+
+    7. Add New User
+    8. Show last 20 Log Entries
+    9. Open Door
+
+    0. This Menu
+```
+
+6. Update /opt/rfid-door-lock/rfid-door-lock.json with 'xoxb-your-bot-token' & 'xapp-your-app-token'
+   See 'Slack App Setup' below
+
+7. Deploy the Service using option 5
+
+8. Restart the Service after deploy using option 2 and watch for Flashing lights
 
 ## Usage
 
-Run the main script:
-```bash
-python3 /home/pi/rfid/rfid-read-validate.py
-```
-
 The system will:
-1. Flash the LED 30 times to indicate startup
+1. Flash the Red/Green LED 15 times to indicate startup
 2. Log the system restart and CPU temperature
-3. Enter the main loop, continuously reading for RFID cards
-4. Validate each card and control door access accordingly
+3. Start the HTTP Listener in it's own thread
+4. Start the Slack Listener in it's own thread
+5. Enter the main loop, continuously waiting for RFID cards
+6. Validate each card and control door access accordingly
 
 ## Operation
 
-### Authorized Access
+### RFID Authorized Access
 1. Card is scanned
 2. Green LED illuminates
 3. Door solenoid activates (if configured)
 4. Access is logged with user details
-5. User's "lastEntered" timestamp is updated
-6. System waits 5 seconds before resetting
+5. User's "lastEntered" timestamp is updated in config file
+6. System waits 5 before locking door and resetting
 
-### Unauthorized Access
+### RFID Unauthorized Access
 1. Card is scanned
 2. Red LED illuminates
 3. Access attempt is logged
 4. System waits 5 seconds before resetting
+
+### Enrolling Users
+Use Option 7 to Add a new user
+1. Follow the prompts to enter user details.
+2. Present the RFID card to the reader.
+3. Press Enter without typing a name to finish and restart the door access system.
+
+### HTTP API
+Open the door remotely with an authenticated POST request:
+
+```bash
+curl -X POST http://your-pi-ip:8000/open \
+  -H "Authorization: Bearer your-secret-token"
+```
+
+**Responses:**
+- `200 OK` — Door opened successfully
+- `401 Unauthorized` — Invalid or missing token
+- `404 Not Found` — Invalid endpoint
 
 ## Logging
 
@@ -159,9 +191,64 @@ All events are logged with timestamps including:
 - Unknown card attempts
 - System temperature readings
 
-## Safety & Shutdown
+## Slack App Setup
 
-Press `Ctrl+C` to safely shutdown the system. This will properly clean up GPIO resources.
+## Slack App Setup
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**
+
+2. **Enable Socket Mode** (Settings → Socket Mode → Enable)
+   - Generate an app-level token with `connections:write` scope
+   - Copy the token (starts with `xapp-`)
+
+3. **Add Bot Permissions** (OAuth & Permissions → Bot Token Scopes):
+   - `channels:history`
+   - `groups:history` (for private channels)
+
+4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
+   - `channels:history` - Read messages in public channels
+   - `groups:history` - Read messages in private channels
+   - `chat:write` - Send messages
+
+5. **Install App** to workspace and copy the Bot Token (starts with `xoxb-`)
+
+6. **Invite the bot** to your private channel: `/invite @YourBotName`
+
+
+
+
+
+
+### 1. Create the Slack App
+1. Go to [https://api.slack.com/apps](https://api.slack.com/apps)
+2. Click **Create New App** → **From scratch**
+3. Name it "Door Opener" and select your workspace
+
+### 2. Configure Bot Permissions
+1. Go to **OAuth & Permissions** in the sidebar
+2. Under **Scopes → Bot Token Scopes**, add:
+   - `channels:history` - Read messages in public channels
+   - `groups:history` - Read messages in private channels
+   - `chat:write` - Send messages
+
+### 3. Install the App
+1. Go to **Install App** in the sidebar
+2. Click **Install to Workspace**
+3. Authorize the app
+4. Copy the **Bot User OAuth Token** (starts with `xoxb-`)
+
+### 4. Get Your Signing Secret
+1. Go to **Basic Information** in the sidebar
+2. Under **App Credentials**, copy the **Signing Secret**
+
+### 5. Get Channel ID
+1. In Slack, right-click on your private channel
+2. Click **View channel details**
+3. At the bottom, copy the **Channel ID** (starts with `C`)
+
+### 6. Invite the Bot
+1. In your private channel, type `/invite @Door Opener`
+
 
 ## Notes
 
