@@ -172,6 +172,7 @@ exec bash
    - `channels:history` - Read messages in public channels
    - `groups:history` - Read messages in private channels
    - `chat:write` - Send messages
+   - `users:read` - Read Slack full name 
 
 4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
    - `message.channels`
