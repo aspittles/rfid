@@ -259,6 +259,7 @@ All events are logged with timestamps including:
 - Check LED polarity
 
 **Door not unlocking:**
+- Check that "open_door" is set to true in the config file
 - Test the MOSFET module with `gpio_init()` and `mosfet_on()` in Python
 - Verify 12V power supply is connected
 - Check solenoid wiring
@@ -267,6 +268,7 @@ All events are logged with timestamps including:
 - Verify both tokens are correct in the config
 - Ensure the bot is invited to the channel
 - Check that Socket Mode is enabled in the Slack app settings
+- Ensure that Raspberry Pi is accessable on the network (Try SSH into console)
 
 ## Notes
 
