@@ -137,6 +137,27 @@ exec bash
 
 9. Restart the Service after deploy using option 2 and watch for Flashing lights
 
+### Slack App Setup
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**
+
+2. **Enable Socket Mode** (Settings → Socket Mode → Enable)
+   - Generate an app-level token with `connections:write` scope
+   - Copy the token (starts with `xapp-`)
+
+3. **Add Bot Permissions** (OAuth & Permissions → Bot Token Scopes):
+   - `channels:history` - Read messages in public channels
+   - `groups:history` - Read messages in private channels
+   - `chat:write` - Send messages
+
+4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
+   - `message.channels`
+   - `message.groups`
+
+5. **Install App** to workspace and copy the Bot Token (starts with `xoxb-`)
+
+6. **Invite the bot** to your private channel: `/invite @YourBotName`
+
 ## Usage
 
 The system will:
@@ -182,28 +203,6 @@ curl -X POST http://your-pi-ip:8000/open \
 - `401 Unauthorized` — Invalid or missing token
 - `404 Not Found` — Invalid endpoint
 
-### Slack App Setup
-
-1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**
-
-2. **Enable Socket Mode** (Settings → Socket Mode → Enable)
-   - Generate an app-level token with `connections:write` scope
-   - Copy the token (starts with `xapp-`)
-
-3. **Add Bot Permissions** (OAuth & Permissions → Bot Token Scopes):
-   - `channels:history` - Read messages in public channels
-   - `groups:history` - Read messages in private channels
-   - `chat:write` - Send messages
-
-4. **Subscribe to Events** (Event Subscriptions → Enable → Subscribe to bot events):
-   - `message.channels`
-   - `message.groups`
-
-5. **Install App** to workspace and copy the Bot Token (starts with `xoxb-`)
-
-6. **Invite the bot** to your private channel: `/invite @YourBotName`
-
-
 ## Logging
 
 All events are logged with timestamps including:
@@ -212,7 +211,6 @@ All events are logged with timestamps including:
 - Blocked access attempts (deactivated cards)
 - Unknown card attempts
 - System temperature readings
-
 
 ## Notes
 
