@@ -133,8 +133,8 @@ exec bash
 ```
 
 6. Door Lock Menu, Use option 0 to show this menu
-```Text
-    Door Lock Menu
+```
+    Door Access Control System
     1. Status
     2. Restart
     3. Start
@@ -214,19 +214,16 @@ Use Option 7 to Add a new user
 
 ### HTTP API
 Open the door remotely with an authenticated POST request:
-
 ```bash
 curl -X POST http://your-pi-ip:8000/open \
   -H "Authorization: Bearer your-secret-token"
 ```
-
 **Responses:**
 - `200 OK` — Door opened successfully
 - `401 Unauthorized` — Invalid or missing token
 - `404 Not Found` — Invalid endpoint
 
-## Logging
-
+### Logging
 All events are logged with timestamps including:
 - System restarts
 - Successful access attempts (with user details)
