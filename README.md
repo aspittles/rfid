@@ -94,9 +94,8 @@ The system requires a JSON configuration file at `/opt/rfid-door-lock/config/rfi
 |---------|-------------|
 | `log_level` | Log file log level INFO or DEBUG |
 | `log_file` | Path to the access log file |
-| `reader` | PN532 (Old setting) |
+| `reader` | PN532 |
 | `open_door` | Enable/disable door unlocking (useful for testing) |
-| `open_door` |  Old bio lock door system password (Old setting) |
 | `http_server_host` | IP address for the HTTP API |
 | `http_server_port` | Port for the HTTP API |
 | `token` | Bearer token for HTTP API authentication |
@@ -230,7 +229,7 @@ All events are logged with timestamps including:
 - Successful access attempts (with user details)
 - Blocked access attempts (deactivated cards)
 - Unknown card attempts
-- System temperature readings
+- System temperature readings are added on each event
 
 ## File Structure
 
@@ -273,6 +272,4 @@ All events are logged with timestamps including:
 
 ## Notes
 
-- The system includes legacy code for a bio lock door system (commented out)
-- CPU temperature is monitored to ensure system health
 - The JSON database is updated in real-time with access timestamps
