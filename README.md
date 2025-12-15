@@ -238,6 +238,7 @@ All events are logged with timestamps including:
 ├── rfid-read-validate.py       # Main application
 ├── modules.py                  # Shared hardware functions
 ├── add-user.py                 # User enrollment utility
+├── open-door.py                # Open door utility
 ├── py532lib-master/            # PN532 I2C library
 ├── menu/                       # Bash Menu files
 ├── documentation/              # Hardware documentation files
