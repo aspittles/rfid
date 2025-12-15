@@ -6,8 +6,6 @@ from time import sleep
 APP_DIR = "/opt/rfid-door-lock"
 CONFIG_FILE = os.path.join(APP_DIR, 'config/rfid-door-lock.json')
 
-sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
-from mfrc522 import SimpleMFRC522
 sys.path.append(APP_DIR)
 from modules import *
 
@@ -41,6 +39,9 @@ while True:
   lastname = input('Enter Last Name:')
   keytype = input('Enter Key Type (KeyFob/KeyCard/CreditCard/OpalCard/Other):')
   notes = input('Enter Notes:')
+  print (' ')
+  print('Hold the new Key to the reader until the green light goes out')
+  print(' ')
   uid = rfid_read_PN532()
   led_green()
   with open(CONFIG_FILE) as json_file:

@@ -5,17 +5,10 @@ from time import sleep
 # Base application directory
 APP_DIR = "/opt/rfid-door-lock"
 
-sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
-from mfrc522 import SimpleMFRC522
 sys.path.append(os.path.join(APP_DIR, 'py532lib-master'))
 from py532lib.i2c import *
 from py532lib.frame import *
 from py532lib.constants import *
-
-# Function to Read the RFID card Using RC522 Reader
-def rfid_read_RC522():
-  uid, text = reader.read()
-  return uid
 
 # Function to Read the RFID card Using PN532 Reader
 def rfid_read_PN532():
@@ -31,19 +24,6 @@ def uid_to_num(uid, size):
   for i in range(0, size):
     n = n * 256 + uid[i]
   return n
-
-# Function to Open the Door lock via URL post to door system
-def open_door(doorpass):
-  headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  }
-  data = {
-    'login': '',
-    'username': 'door',
-    'password': doorpass,
-    'button': 'Open Door'
-  }
-  response = requests.post('http://192.168.0.210/dyn', headers=headers, data=data)
 
 # Function to Init GPIO for LED
 def gpio_init():

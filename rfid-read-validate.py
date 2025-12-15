@@ -10,8 +10,6 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 # Base application directory
 APP_DIR = "/opt/rfid-door-lock"
 
-sys.path.append(os.path.join(APP_DIR, 'MFRC522-python'))
-from mfrc522 import SimpleMFRC522
 sys.path.append(os.path.join(APP_DIR, 'py532lib-master'))
 from py532lib.i2c import *
 from py532lib.frame import *
@@ -34,8 +32,6 @@ def validate_access(uid, data):
     if authorised:
       led_green()
       if (data["config"]["open_door"]):
-        # doorpass = data["config"]["door_pass"]
-        # open_door(doorpass) # Old Bio lock method to open door
         mosfet_on()  # Send 12V power to door Solenoid to open door
       logging.info("ALLOW: Access by: " + str(uid) + " (" + name + ")")
       logging.debug((data["users"][record_num]))
@@ -89,6 +85,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'text/plain')
                 self.end_headers()
                 self.wfile.write(b'Unauthorized')
+                logging.info("BLOCK: Access attempt by: Remote API call - Incorrect Token")
+                temp = get_temp()
+                logging.info("Raspberry Pi Temp: " + str(temp))
                 return
 
             self.send_response(200)
@@ -97,6 +96,9 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(b'Door Open')
             led_green()
             mosfet_on()  # Send 12V power to door Solenoid to open door
+            logging.info("ALLOW: Access by: Remote API call")
+            temp = get_temp()
+            logging.info("Raspberry Pi Temp: " + str(temp))
             sleep(5)
             led_off()
             mosfet_off()
@@ -111,15 +113,14 @@ app = App(token=data["config"]["slack_bot_token"])
 
 @app.message(re.compile(r"^open$", re.IGNORECASE))
 def handle_open(message, say, client):
-    user_info = client.users_info(user=message["user"])
-    slack_name = user_info["user"]["real_name"]
-    logging.info("ALLOW: Access by: Slack Door Channel (" + slack_name + ")")
-    say("Station Door Opened")
-    print(slack_name)
-    temp = get_temp()
-    logging.info("Raspberry Pi Temp: " + str(temp))
     led_green()
     mosfet_on()  # Send 12V power to door Solenoid to open door
+    user_info = client.users_info(user=message["user"])
+    slack_name = user_info["user"]["real_name"]
+    say("Station Door Opened")
+    logging.info("ALLOW: Access by: Slack Door Channel (" + slack_name + ")")
+    temp = get_temp()
+    logging.info("Raspberry Pi Temp: " + str(temp))
     sleep(5)
     led_off()
     mosfet_off()
@@ -131,9 +132,6 @@ def handle_unknown(message, say):
 @app.event("message")
 def handle_message_events(body, logger):
     pass
-
-# Create RFID reader object
-# reader = SimpleMFRC522()
 
 # Signal that we are up and running
 for led_flash in range(0, 15):
@@ -162,9 +160,7 @@ handler.connect()
 # Main Loop
 try:
   while True:
-    if (data["config"]["reader"] == "RC522"):
-      uid = rfid_read_RC522()
-    elif (data["config"]["reader"] == "PN532"):
+    if (data["config"]["reader"] == "PN532"):
       uid = rfid_read_PN532()
     else:
       uid = 0
@@ -176,4 +172,3 @@ try:
 except KeyboardInterrupt:
   GPIO.cleanup()
   server.shutdown()
-
