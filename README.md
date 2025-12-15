@@ -155,9 +155,9 @@ exec bash
 sudo nano /opt/rfid-door-lock/config/rfid-door-lock.json
 ```
 
-9. Deploy the Service using option 5
+8. Deploy the Service using option 5
 
-10. Restart the Service after deploy using option 2 and watch for Flashing lights
+9. Restart the Service after deploy using option 2 and watch for Flashing lights
 
 ### Slack App Setup
 
