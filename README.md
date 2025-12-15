@@ -150,9 +150,10 @@ exec bash
     0. This Menu
 ```
 
-7. Update `/opt/rfid-door-lock/config/rfid-door-lock.json` with the Bearer `token`
-   
-8. Update `/opt/rfid-door-lock/config/rfid-door-lock.json` with the Slack `xoxb-your-bot-token` & `xapp-your-app-token` (See **Slack App Setup** section below)
+7. Update `rfid-door-lock.json` with the Bearer `token` and the Slack `xoxb-your-bot-token` & `xapp-your-app-token` (See **Slack App Setup** section below)
+```bash
+sudo nano /opt/rfid-door-lock/config/rfid-door-lock.json
+```
 
 9. Deploy the Service using option 5
 
